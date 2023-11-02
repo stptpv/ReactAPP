@@ -1,11 +1,10 @@
-// Login.js
 import React, { useState } from 'react';
 import api from './apiService';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from './userActions';
 import { useDispatch } from 'react-redux';
 
-import { useMutation, gql, useApolloClient } from '@apollo/client'; // Импортируйте useApolloClient
+import { useMutation, gql, useApolloClient } from '@apollo/client'; 
 
 
 function Login() {
@@ -38,15 +37,14 @@ function Login() {
           }
         `,
       });
-      console.log('Ответ от сервера:', response.data.login);
+      console.log('Ответ от сервера:', response.data.data.login.token);
 
       //const response = await login({ variables: { email, password } });
-      const { token } = response.data;
+      const { token } = response.data.data.login.token;
 
       dispatch(setUser(email));
       
       Notification.requestPermission(function(permission){
-        // переменная permission содержит результат запроса
         console.log('Результат запроса прав:', permission);
         if (permission === "granted") {
           var notification = new Notification('Сколько',
@@ -54,9 +52,8 @@ function Login() {
           
           }
         });
-        
-  
-      navigate('/home');
+        if (response.data.data.login.token !== null) {
+      navigate('/home');}
     } catch (err) {
       setError('Неверное имя пользователя или пароль.');
     }

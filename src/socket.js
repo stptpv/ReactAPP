@@ -1,39 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import { websocketURL } from './config.js';
+import { Form, InputGroup, Button, Card } from 'react-bootstrap';
 
 const WebSocketExample = () => {
-  const [message, setMessage] = useState(''); // Состояние для хранения сообщения и ответа
+  const [message, setMessage] = useState('');
   const [echoResponse, setEchoResponse] = useState('');
+  const [inputMessage, setInputMessage] = useState('');
+  const [ws, setWs] = useState(null);
 
   useEffect(() => {
-    const ws = new WebSocket(websocketURL);
+    const newWs = new WebSocket(websocketURL);
+    setWs(newWs);
 
-    ws.onopen = () => {
+    newWs.onopen = () => {
       console.log('WebSocket connected');
-      // Отправить команду "echo" после установки соединения
-      ws.send('echo Hello, World!');
     };
 
-    ws.onmessage = (event) => {
+    newWs.onmessage = (event) => {
       console.log('Received message:', event.data);
-      setEchoResponse(event.data); // Сохранить ответ в состоянии
+      setEchoResponse(event.data);
     };
 
-    ws.onclose = (event) => {
+    newWs.onclose = (event) => {
       console.log(`WebSocket closed: ${event.code} - ${event.reason}`);
     };
 
     return () => {
-      // Закрыть вебсокетное подключение при размонтировании компонента
-      ws.close();
+      if (newWs) {
+        newWs.close();
+      }
     };
   }, []);
 
+  const handleSendMessage = () => {
+    if (ws) {
+      console.log('WebSocket is available');
+      ws.send(inputMessage);
+    }
+  };
+
   return (
-    <div>
-      <p>WebSocket Example</p>
-      <p>Response: {echoResponse}</p>
-    </div>
+    <>
+      <InputGroup className="mb-3">
+        <Form.Control
+          placeholder="Enter a message"
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+        />
+
+        <Button variant="primary" onClick={handleSendMessage}>
+          Send
+        </Button>
+      </InputGroup>
+
+      <Card>
+        <Card.Body>
+          <Card.Title>Response</Card.Title>
+          <Card.Text>{echoResponse}</Card.Text>
+        </Card.Body>
+      </Card>
+    </>
   );
 };
 

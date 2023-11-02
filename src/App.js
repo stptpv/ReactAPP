@@ -9,7 +9,7 @@ import Login from './Login';
 import WebSocketExample from './socket';
 
 import { ApolloProvider } from '@apollo/client';
-import { client } from '../src/apollo'; // Пусть 'client' будет вашим клиентом Apollo
+import { client } from '../src/apollo'; 
 
 import React from "react";
 import {
@@ -34,7 +34,7 @@ function App() {
         
         <Route exact path="/" element={<Login />}/>
 
-        <Route path="/socket" element={<WebSocketExample />}/>
+        
 
       </Routes>
       </ApolloProvider>

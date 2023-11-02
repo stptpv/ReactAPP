@@ -10,18 +10,18 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ARTICLE:
-      const addedArticles = [...state.articles, action.payload]; // Переименовали переменную
+      const addedArticles = [...state.articles, action.payload]; 
 
-      console.log("Updated Articles after adding:", addedArticles); // Вывод данных в консоль
+      console.log("Updated Articles after adding:", addedArticles); 
 
       return {
         ...state,
-        articles: addedArticles, // Используем переименованную переменную
+        articles: addedArticles, 
       };
     case DELETE_ARTICLE:
       const updatedArticles = [...state.articles];
       updatedArticles.splice(action.payload, 1);
-      console.log("Updated Articles after deletion:", updatedArticles); // Вывод данных в консоль
+      console.log("Updated Articles after deletion:", updatedArticles); 
 
       return {
         ...state,

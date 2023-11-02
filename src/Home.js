@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Modal, Form } from "react-bootstrap";
+import { Container, Modal } from "react-bootstrap";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,16 +10,17 @@ function ArticleDialog({ isOpen, onClose, onAddArticle }) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [image, setImage] = useState(null);
+    const [tags, setTags] = useState(null);
 
     const handleAddArticle = () => {
-        onAddArticle({ title, content, image });
-        console.log("Received articles in handleAddArticle:", title, content, image);
+        onAddArticle({ title, content, image, tags });
+        console.log("Received articles in handleAddArticle:", title, content, image,tags);
         var notification = new Notification('Плюс одна статейка',
           { body: 'Только ты!'});
-        // Reset form fields
         setTitle("");
         setContent("");
         setImage(null);
+        setTags("");
         onClose();
     };
   
@@ -45,32 +46,86 @@ function ArticleDialog({ isOpen, onClose, onAddArticle }) {
             accept="image/*"
             onChange={(e) => setImage(e.target.files[0])}
           />
-          
+          <input
+            type="text"
+            placeholder="Теги"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+          />
           
           <button onClick={handleAddArticle}>Добавить</button>
-          <button onClick={onClose}>Закрыть</button>
         </div>
       )
     );
   }
   function Example() {
     const [show, setShow] = useState(false);
+    const [show1, setShow1] = useState(false);
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const dispatch = useDispatch();
 
+    const [selectedArticleIndex, setSelectedArticleIndex] = useState(null);
+    const articles = useSelector(state => state.user.articles);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleShow1 = () => setShow1(true);
+    const handleClose1 = () => setShow1(false);
+
+
     const openDialog = () => {
       handleShow(); // Открывает модальное окно
       setIsDialogOpen(true); // Открывает диалоговое окно
+    };
+    const openDialogDel = () => {
+      handleShow1(); // Открывает модальное окно
+      setIsDialogOpen(true); // Открывает диалоговое окно
+      handleDeleteArticle();
+    };
+    const handleDeleteArticle = () => {
+      if (selectedArticleIndex !== null) {
+        dispatch(deleteArticle(selectedArticleIndex));
+        setSelectedArticleIndex(null);
+      }
     };
     return (
       <>
         <Button variant="primary" onClick={openDialog}>
           Добавить        
         </Button>
+        <Button onClick= {openDialogDel}>
+          Удалить
+        </Button>
 
-  
+        <Modal show={show1} onHide={handleClose1}>
+          <Modal.Header closeButton>
+            <Modal.Title>Выберите статью для удаления:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <select
+        value={selectedArticleIndex}
+        onChange={(e) => setSelectedArticleIndex(Number(e.target.value))}
+      >
+        <option value={null}>Не выбрано</option>
+        {articles && articles.map((_, index) => (
+          <option key={index} value={index}>
+            Статья {index + 1}
+          </option>
+        ))}
+      </select>
+      <Button onClick= {openDialogDel}>
+          Удалить
+        </Button>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose1}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+       
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Добавить статью</Modal.Title>
@@ -112,6 +167,7 @@ function ArticleDialog({ isOpen, onClose, onAddArticle }) {
                       style={{ maxWidth: "100px" }}
                     />
                   )}
+                  <Card.Footer>Tags: {article.articles.tags}</Card.Footer>
                 </ListGroup.Item>
               ))}
             </ListGroup>
@@ -120,20 +176,12 @@ function ArticleDialog({ isOpen, onClose, onAddArticle }) {
   }
   
 export const Home = () => {
-    const email = useSelector(state => state.user.email);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedArticleIndex, setSelectedArticleIndex] = useState(null);
+  const email = useSelector(state => state.user.email);
   const dispatch = useDispatch();
   const articles = useSelector(state => state.user.articles);
   console.log("Articles in Redux state:", articles); // Вывод данных в консоль
 
 
-  const handleDeleteArticle = () => {
-    if (selectedArticleIndex !== null) {
-      dispatch(deleteArticle(selectedArticleIndex));
-      setSelectedArticleIndex(null);
-    }
-  };
   
   return (
 
@@ -148,20 +196,7 @@ export const Home = () => {
         />
 
       <ArticleList articles={articles}  />
-      <p>Выберите статью для удаления:</p>
-      <select
-        value={selectedArticleIndex}
-        onChange={(e) => setSelectedArticleIndex(Number(e.target.value))}
-      >
-        <option value={null}>Не выбрано</option>
-        {articles && articles.map((_, index) => (
-          <option key={index} value={index}>
-            Статья {index + 1}
-          </option>
-        ))}
-      </select>
-      <Button onClick= {handleDeleteArticle}>Удалить</Button>
-
+      
     </div>
     </Col>
     <Col>Latest posts
@@ -176,7 +211,7 @@ export const Home = () => {
           bulk of the card's content.
         </Card.Text>
         <Card.Subtitle className="mb-2 text-muted text-end">Yesterday</Card.Subtitle>
-        <Card.Link href="#">More</Card.Link>
+        <Card.Link href="#" >More</Card.Link>
       </Card.Body>
     </Card>
     Me on twitter

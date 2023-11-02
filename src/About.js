@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card } from 'react-bootstrap';
-
+import WebSocketExample from './socket'
 export const About = () => {
     return (
         <Container className="mt-4">
@@ -25,6 +25,7 @@ export const About = () => {
                   </Card.Text>
                 </Card.Body>
               </Card>
+              <WebSocketExample></WebSocketExample>
             </Col>
           </Row>
         </Container>
