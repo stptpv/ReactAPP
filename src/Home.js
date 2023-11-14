@@ -5,7 +5,10 @@ import Col from 'react-bootstrap/Col';
 import { useSelector, useDispatch } from 'react-redux';
 import { addArticle, deleteArticle } from "./userActions";
 import {Card, ListGroup, Button } from 'react-bootstrap';
+import { CDBRating } from 'cdbreact';
 
+
+ 
 function ArticleDialog({ isOpen, onClose, onAddArticle }) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -167,14 +170,18 @@ function ArticleDialog({ isOpen, onClose, onAddArticle }) {
                       style={{ maxWidth: "100px" }}
                     />
                   )}
-                  <Card.Footer>Tags: {article.articles.tags}</Card.Footer>
+                  <Row><Col>Tags: {article.articles.tags}</Col>
+                  <Col><div class="d-flex justify-content-end">Rate:<CDBRating feedback /></div></Col></Row>
+                  
+                  
+                  
                 </ListGroup.Item>
               ))}
             </ListGroup>
           </Card>
       );
   }
-  
+
 export const Home = () => {
   const email = useSelector(state => state.user.email);
   const dispatch = useDispatch();
@@ -187,9 +194,9 @@ export const Home = () => {
 
     <>
     
-    <Container>
+    <Container fluid>
         <Row>
-        <Col>
+        <Col xs={8} >
         <div className="App">
       
         <Example
@@ -199,8 +206,8 @@ export const Home = () => {
       
     </div>
     </Col>
-    <Col>Latest posts
-    <Card style={{ width: '18rem' }}>
+    <Col xs={4} >Latest posts
+    <Card >
       <Card.Body>
         <Card.Text>
           Some quick example text to build on the card title and make up the
@@ -209,13 +216,20 @@ export const Home = () => {
           bulk of the card's content.
           Some quick example text to build on the card title and make up the
           bulk of the card's content.
+          <div class="d-flex align-items-end flex-column mb-3" >
+  <div class="p-3"><Card.Link href="#" >More</Card.Link></div>
+
+  <div class="p-2">Yesterday</div>
+
+  
+</div>
         </Card.Text>
-        <Card.Subtitle className="mb-2 text-muted text-end">Yesterday</Card.Subtitle>
-        <Card.Link href="#" >More</Card.Link>
+        
+        
       </Card.Body>
     </Card>
     Me on twitter
-    <Card style={{ width: '18rem' }}>
+    <Card >
       <Card.Body>
         <Card.Text>
           Some quick example text to build on the card title and make up the

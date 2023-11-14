@@ -14,15 +14,20 @@ if(email!==null){
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
             <Navbar.Collapse id="responsive-navbar-nav">
-                <Nav className="mr-auto">
-                {isAuthenticated ? <Nav.Link><Link to="/Home">Home</Link></Nav.Link> : null}
-                {isAuthenticated ? <Nav.Link><Link to="/About">About</Link></Nav.Link> : null}
-                    <Nav.Link>Blog's Main Topic 1</Nav.Link>
-                    <Nav.Link>Blog's Main Topic 1</Nav.Link>
-                    <Nav.Link>Blog's Main Topic 1</Nav.Link>
-                    <Nav.Link>Associated blog's</Nav.Link>
-                    <Nav.Link>RSS</Nav.Link>
-                </Nav>
+            <Nav className="mr-auto">
+            {isAuthenticated ? <Nav.Link><Link to="/Home">Home</Link></Nav.Link> : null}
+            {isAuthenticated ? <Nav.Link><Link to="/About">About</Link></Nav.Link> : null}
+            <Nav.Link>Blog's Main Topic 1</Nav.Link>
+            <Nav.Link>Blog's Main Topic 2</Nav.Link>
+            <Nav.Link>Blog's Main Topic 3</Nav.Link>
+            <Nav.Link>Associated blog's</Nav.Link>
+        </Nav>
+        
+        <Navbar.Collapse className="justify-content-end">
+          <Navbar.Text>
+          RSS   
+          </Navbar.Text>
+        </Navbar.Collapse>
                 
             </Navbar.Collapse>
         </Navbar>
