@@ -39,15 +39,19 @@
 
    https://github.com/stptpv/JWT-service
 
-4.Запуск. 
+3.Запуск. 
 
    Для успешного запуска введите в терминале следующую команду для проекта:
      npm start
    Для успешного запуска введите в терминале следующую команду для сервиса:
      npm run start-auth
 
-5.Авторизация.
+4.Авторизация.
 
    Для проверки можете использовать следующие данные:
      bruno@email.com
      bruno
+
+5.Для запуска проекта из под Docker:
+  docker build -t getting-started .
+  docker run -dp 3000:3000 getting-started   
